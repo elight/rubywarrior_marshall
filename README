@@ -1,20 +1,19 @@
-Level 4
+Level 7
 
-Your ears become more in tune with the surroundings. Listen to find enemies and captives!
+Another ticking sound, but some sludge is blocking the way.
 
-Tip: Use warrior.listen to find spaces with other units, and warrior.direction_of to determine what direction they're in.
+Tip: Quickly kill the sludge and rescue the captive before the bomb goes off. You can't simply go around them.
 
- ----
-|C s |
-| @ S|
-|C s>|
- ----
+ -----
+| sC >|
+|@ s C|
+| s   |
+ -----
 
   > = Stairs
   @ = Marshall (20 HP)
-  C = Captive (1 HP)
   s = Sludge (12 HP)
-  S = Thick Sludge (24 HP)
+  C = Captive (1 HP)
 
 
 Warrior Abilities:
