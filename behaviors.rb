@@ -60,7 +60,7 @@ module Behaviors
     if captive_next_to_me? && captive_next_to_me.ticking?
       @warrior.rescue! direction_of_captive_next_to_me
     elsif safe?
-      if distance_of_ticking > 2 && @warrior.health < @max_health
+      if distance_of_ticking > 2 && @warrior.health < @max_health / 4
         @warrior.rest!
       else
         @warrior.walk! direction_of_ticking
