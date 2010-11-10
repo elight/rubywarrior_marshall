@@ -24,25 +24,14 @@ class Player
     @max_health ||= @warrior.health
     @past_direction = @desired_direction
 
-    @desired_direction = choose_direction_toward_objective
-    say "I want to go #{@desired_direction}"
+    choose_direction_toward_objective
 
-    if safe?
-      if wounded?
-        @warrior.rest!
-      elsif see_captive?
-        @warrior.rescue! direction_of_captive
-      else
-        @warrior.walk! @desired_direction
-      end
+    if hear_ticking?
+      act_toward_ceasing_ticking!
+    elsif safe?
+      rest_rescue_or_walk!
     elsif surrounded? && 
-      if enemies_are_unbound?
-        @warrior.bind! direction_of_unbound_enemy
-      elsif enemy_in_my_path?
-        face_the_peril!
-      else 
-        @warrior.walk! @desired_direction
-      end
+      fight_or_escape!
     elsif wounded?
       run_away!
     elsif enemy_in_my_path? 
@@ -57,7 +46,7 @@ class Player
     captives = entities.select { |e| e.unit.is_a? Captive }
     ticking = captives.find { |c| c.ticking? }
 
-    direction = if ticking
+    @desired_direction = if hear_ticking?
         @warrior.direction_of(ticking).tap do |dir|
           say "I hear ticking coming from #{dir}"
         end
@@ -66,8 +55,9 @@ class Player
           say "A captive is somewhere #{dir} of me"
         end
       else
-        @warrior.direction_of_stairs
+        @warrior.direction_of_stairs.tap do |dir|
+          say "The stairs are #{dir} of me"
+        end
       end
-    return direction
   end
 end
