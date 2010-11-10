@@ -47,4 +47,8 @@ module Senses
       return @warrior.distance_of ticking
     end
   end
+
+  def enemies_in_direction_of_ticking?
+    @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? } 
+  end
 end

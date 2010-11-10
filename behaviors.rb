@@ -58,25 +58,24 @@ module Behaviors
 
   def act_toward_ceasing_ticking!
     if captive_next_to_me? && captive_next_to_me.ticking?
-      @warrior.rescue! direction_of_captive_next_to_me
+      @warrior.rescue!(direction_of_captive_next_to_me) and return
     elsif safe?
-      if distance_of_ticking > 2 && @warrior.health < @max_health / 4
-        @warrior.rest!
-      else
-        @warrior.walk! direction_of_ticking
+      if distance_of_ticking > 2 
+        if enemies_in_direction_of_ticking? && wounded?
+          @warrior.rest! and return
+        end
       end
     elsif enemy_in_my_path?
-      clear_a_path!
-    else
-      @warrior.walk! direction_of_ticking
+      clear_a_path! and return
     end
+    @warrior.walk! direction_of_ticking
   end
 
   def clear_a_path!
     if surrounded? && num_unbound_enemies_near_me > 1
       fight_or_escape!
     else 
-      if @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? } && distance_of_ticking > 2
+      if enemies_in_direction_of_ticking? && distance_of_ticking > 2
         say "There's ticking and there are two enemies in my way: blast them!"
         @warrior.detonate! direction_of_ticking
       else
