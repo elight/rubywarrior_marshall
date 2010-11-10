@@ -49,6 +49,10 @@ module Senses
   end
 
   def enemies_in_direction_of_ticking?
+    @warrior.look(direction_of_ticking)[0,2].any? { |s| s.enemy? } 
+  end
+
+  def enemies_2_deep_in_direction_of_ticking?
     @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? } 
   end
 end
