@@ -4,7 +4,7 @@ module Feelings
   end
 
   def safe?
-    (enemy_count == 0).tap do |safe|
+    (num_unbound_enemies_near_me == 0).tap do |safe|
       say "I #{safe ? "" : "do not "}feel safe now."
     end
   end

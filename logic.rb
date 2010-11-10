@@ -53,6 +53,14 @@ module Logic
     return nil
   end
 
+  def num_unbound_enemies_near_me
+    DIRECTIONS.inject(0) do |sum, direction|
+      unit = @warrior.feel(direction).unit
+      sum += 1 if unit && !unit.bound?
+      sum
+    end
+  end
+
   def direction_of_captive_next_to_me
     result = nil
     DIRECTIONS.each do |dir|

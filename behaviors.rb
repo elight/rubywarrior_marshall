@@ -13,7 +13,12 @@ module Behaviors
     elsif feel_captive?
       @warrior.rescue! direction_of_captive_next_to_me
     else
-      @warrior.walk! @desired_direction
+      space = @warrior.feel @desired_direction
+      if space.empty?
+        @warrior.walk! @desired_direction
+      else 
+        @warrior.attack! @desired_direction
+      end
     end
   end
 
@@ -55,24 +60,28 @@ module Behaviors
     if captive_next_to_me? && captive_next_to_me.ticking?
       @warrior.rescue! direction_of_captive_next_to_me
     elsif safe?
-      @warrior.walk! direction_of_ticking
+      if distance_of_ticking > 2 &&@warrior.health < @max_health
+        @warrior.rest!
+      else
+        @warrior.walk! direction_of_ticking
+      end
     else
       clear_a_path!
     end
   end
 
   def clear_a_path!
-    if @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? }
-      say "There's ticking and there are two enemies in my way: blast them!"
-      @warrior.detonate! direction_of_ticking
-    end
-  end
-
-  def enemy_count
-    DIRECTIONS.inject(0) do |sum, dir|
-      space = @warrior.feel dir
-      sum += 1 if space.enemy? || (space.unit && !space.golem? && !space.unit.is_a?(Captive))
-      sum
+    if surrounded? && num_unbound_enemies_near_me > 1
+      fight_or_escape!
+    else 
+      @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? }
+      if distance_of_ticking < 2
+        say "There's ticking and there are two enemies in my way: blast them!"
+        @warrior.detonate! direction_of_ticking
+      else
+        say "The ticking captive is too close.  Have at you!"
+        @warrior.attack! direction_of_ticking
+      end
     end
   end
 end

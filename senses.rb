@@ -5,7 +5,7 @@ module Senses
   end
 
   def surrounded?
-    enemy_count > 1
+    num_unbound_enemies_near_me > 1
   end
 
   def enemy_in_my_path?
@@ -35,8 +35,16 @@ module Senses
     entities = @warrior.listen
     ticking = entities.find { |c| c.ticking? }
     if ticking
-      return @warrior.direction_of(ticking)
+      return @warrior.direction_of ticking
     end
     nil
+  end
+
+  def distance_of_ticking
+    entities = @warrior.listen
+    ticking = entities.find { |c| c.ticking? }
+    if ticking
+      return @warrior.distance_of ticking
+    end
   end
 end
