@@ -76,8 +76,7 @@ module Behaviors
     if surrounded? && num_unbound_enemies_near_me > 1
       fight_or_escape!
     else 
-      @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? }
-      if distance_of_ticking > 2
+      if @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? } && distance_of_ticking > 2
         say "There's ticking and there are two enemies in my way: blast them!"
         @warrior.detonate! direction_of_ticking
       else
