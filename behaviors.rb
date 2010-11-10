@@ -77,7 +77,7 @@ module Behaviors
       fight_or_escape!
     else 
       @warrior.look(direction_of_ticking)[0,2].all? { |s| s.enemy? }
-      if distance_of_ticking < 2
+      if distance_of_ticking > 2
         say "There's ticking and there are two enemies in my way: blast them!"
         @warrior.detonate! direction_of_ticking
       else
