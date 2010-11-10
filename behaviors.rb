@@ -60,8 +60,8 @@ module Behaviors
     if captive_next_to_me? && captive_next_to_me.ticking?
       @warrior.rescue!(direction_of_captive_next_to_me) and return
     elsif safe?
-      if distance_of_ticking > 2 
-        if enemies_in_direction_of_ticking? && wounded?
+      if enemies_in_direction_of_ticking? && 
+         wounded?
           @warrior.rest! and return
         end
       end
