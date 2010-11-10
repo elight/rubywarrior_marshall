@@ -7,11 +7,9 @@ module Behaviors
   include Senses
   include Logic
 
-  def rest_rescue_or_walk!
+  def rest_or_move!
     if wounded?
       @warrior.rest!
-    elsif feel_captive?
-      @warrior.rescue! direction_of_captive_next_to_me
     else
       space = @warrior.feel @desired_direction
       if space.empty?
@@ -47,10 +45,12 @@ module Behaviors
   end
 
   def fight_or_escape!
-    if enemies_are_unbound?
+    if captive_next_to_me?
+      @warrior.rescue! direction_of_captive_next_to_me
+    elsif enemies_are_unbound?
       @warrior.bind! direction_of_unbound_enemy
     elsif enemy_in_my_path?
-      face_the_peril!
+      @warrior.attack! @desired_direction
     else 
       @warrior.walk! @desired_direction
     end
@@ -60,13 +60,15 @@ module Behaviors
     if captive_next_to_me? && captive_next_to_me.ticking?
       @warrior.rescue! direction_of_captive_next_to_me
     elsif safe?
-      if distance_of_ticking > 2 &&@warrior.health < @max_health
+      if distance_of_ticking > 2 && @warrior.health < @max_health
         @warrior.rest!
       else
         @warrior.walk! direction_of_ticking
       end
-    else
+    elsif enemy_in_my_path?
       clear_a_path!
+    else
+      @warrior.walk! direction_of_ticking
     end
   end
 

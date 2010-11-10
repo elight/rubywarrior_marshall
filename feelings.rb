@@ -10,7 +10,7 @@ module Feelings
   end
 
   def wounded?
-    (@warrior.health < @max_health / 4).tap do |wounded|
+    (@warrior.health < @max_health / 2).tap do |wounded|
       say "But OUCH!" if wounded
     end
   end

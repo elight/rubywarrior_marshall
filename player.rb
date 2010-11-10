@@ -28,9 +28,11 @@ class Player
 
     if hear_ticking?
       act_toward_ceasing_ticking!
+    elsif captive_next_to_me?
+      @warrior.rescue! direction_of_captive_next_to_me
     elsif safe?
-      rest_rescue_or_walk!
-    elsif surrounded? && 
+      rest_or_move!
+    elsif surrounded? 
       fight_or_escape!
     elsif wounded?
       run_away!
